@@ -28,3 +28,11 @@ body{overflow-x:clip}
 @keyframes card-arrive{from{opacity:.4;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:760px){.swipe-guide{font-size:11px;margin-bottom:12px}.actions{margin-top:11px}.swipe-stamp{top:57px;font-size:23px}.choice{gap:8px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Native touch scrolling is gated by the non-passive horizontal gesture handler. */
+#card-host .name-card{touch-action:auto;-webkit-user-select:none;-webkit-touch-callout:none}
+
+/* Native touch scrolling is gated by the horizontal gesture handler. */
+#card-host .name-card{touch-action:auto;-webkit-user-select:none;-webkit-touch-callout:none}
+main>.workspace{padding-top:24px}
+@media(max-width:760px){main>.workspace{padding-top:16px}}

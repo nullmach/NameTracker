@@ -35,3 +35,31 @@ test('short drags, vertical scrolling and cancelled gestures never choose a name
     assert.ok(!s.classes.has('dragging'));
   }
 });
+test('finger swipes prevent horizontal scrolling and ignore browser pointer cancellation',()=>{
+  for(const [dx,decision] of [[110,'like'],[-110,'pass']]){
+    const s=setup();let prevented=false;
+    const touch=(x,y=0)=>({identifier:7,clientX:x,clientY:y});
+    s.event('pointerdown',0,0,{pointerType:'touch'});
+    s.event('touchstart',0,0,{touches:[touch(0)]});
+    s.event('touchmove',0,0,{touches:[touch(dx,12)],cancelable:true,preventDefault:()=>prevented=true});
+    s.event('pointercancel',dx,12,{pointerType:'touch'});
+    assert.equal(s.host.dataset.direction,decision);
+    assert.equal(prevented,true);
+    s.event('touchend',0,0,{changedTouches:[touch(dx,12)]});
+    s.event('pointerup',dx,12,{pointerType:'touch'});
+    assert.deepEqual(s.choices,[decision]);
+  }
+});
+test('vertical touch scrolling, multi-touch and touch cancellation never make choices',()=>{
+  for(const mode of ['vertical','multi','cancel','short']){
+    const s=setup();let prevented=false;
+    const touch=(x,y=0)=>({identifier:7,clientX:x,clientY:y});
+    s.event('touchstart',0,0,{touches:[touch(0)]});
+    const touches=mode==='multi'?[touch(100),{...touch(120),identifier:8}]:[touch(mode==='short'?20:100,mode==='vertical'?150:0)];
+    s.event('touchmove',0,0,{touches,cancelable:true,preventDefault:()=>prevented=true});
+    if(mode==='cancel')s.event('touchcancel',0);
+    s.event('touchend',0,0,{changedTouches:[touch(100)]});
+    assert.deepEqual(s.choices,[]);
+    if(['vertical','multi'].includes(mode))assert.equal(prevented,false);
+  }
+});

@@ -1,4 +1,4 @@
-import {attachSwipe,animateChoice} from './swipe.js';
+import {attachSwipe,animateChoice} from './swipe.js?v=touch-2';
 import {themes,key,matches,validateBackup} from './model.js';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], STORAGE='little-name-club-v1';
 let data,decisions={},history=[],queue=[],current,filters={sex:'all',theme:'all',query:''},view='discover',choosing=false;
@@ -22,7 +22,7 @@ async function choose(value){
   queue.shift();
   persist();
   $('#like').disabled=$('#pass').disabled=true;
-  await animateChoice(element,value);
+  try { await animateChoice(element,value); } catch { /* Advance even when animation is unavailable. */ }
   // Undo, filtering, or importing may have replaced this card during its exit.
   if(element?.isConnected)show();
 }

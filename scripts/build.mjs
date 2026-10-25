@@ -19,7 +19,7 @@ for (const [i,file] of files.entries()) {
   totals.push(sum);
 }
 await fs.mkdir('dist/assets/history',{recursive:true});
-for (const f of ['index.html','styles.css','app.js','model.js']) await fs.copyFile(`src/${f}`,`dist/${f}`);
+for (const f of ['index.html','styles.css','app.js','model.js','swipe.js']) await fs.copyFile(`src/${f}`,`dist/${f}`);
 const shards = {}, catalog = [];
 for (const [id,n] of names) {
   catalog.push([n.name,n.sex,n.count,n.rank,n.peakYear,n.peak,n.total]);
